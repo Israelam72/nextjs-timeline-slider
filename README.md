@@ -17,7 +17,7 @@ yarn install
 yarn dev
 ```
 ```bash
-npm i timeline-bar-slider
+yarn add timeline-bar-slider
 ```
 
 ## Usage
