@@ -1,36 +1,100 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## React Timeline Range Slider (Next.js + Tailwind)
+
+I refactored this library from [lizashkod](https://github.com/lizashkod)], to update and use modern technologies.
+Credits are given bellow.
+
+---
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- **Node.js** (v24.10.0)
+- **Yarn** (or `npm` / `pnpm` / `bun`)
 
 ```bash
-npm run dev
-# or
+yarn install
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Usage
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The `TimeRange` component is exported from `src/lib/index.tsx` and used in the example page.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Basic usage (simplified from `src/app/page.tsx`):
 
-## Learn More
+```tsx
+import React, { useState } from 'react';
+import { endOfToday, set } from 'date-fns';
+import TimeRange from '@/lib';
 
-To learn more about Next.js, take a look at the following resources:
+const now = new Date();
+const getTodayAtSpecificHour = (hour: number = 12): Date =>
+  set(now, { hours: hour, minutes: 0, seconds: 0, milliseconds: 0 });
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+type Interval = [Date, Date];
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+const App: React.FC = () => {
+  const [error, setError] = useState(false);
+  const [selectedInterval, setSelectedInterval] = useState<Interval>([
+    getTodayAtSpecificHour(),
+    getTodayAtSpecificHour(14),
+  ]);
 
-## Deploy on Vercel
+  const startTime = getTodayAtSpecificHour(7);
+  const endTime = endOfToday();
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+  const disabledIntervals = [
+    { start: getTodayAtSpecificHour(16), end: getTodayAtSpecificHour(17) },
+  ];
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+  const errorHandler = ({ error }: { error?: boolean }) => {
+    setError(Boolean(error));
+  };
+
+  const onChangeCallback = (interval: Date[]) => {
+    setSelectedInterval(interval as Interval);
+  };
+
+  return (
+    <TimeRange
+      error={error}
+      ticksNumber={36}
+      selectedInterval={selectedInterval}
+      timelineInterval={[startTime, endTime]}
+      onUpdateCallback={errorHandler}
+      onChangeCallback={onChangeCallback}
+      disabledIntervals={disabledIntervals}
+    />
+  );
+};
+
+export default App;
+```
+
+## Tech Stack
+
+- **Next.js 16 (App Router)**
+- **React 19**
+- **TypeScript**
+- **Tailwind CSS v4**
+- **date-fns**
+- **react-compound-slider**
+
+---
+
+## Credits
+
+This project is **heavily based on** the original work by **[lizashkod](https://github.com/lizashkod)**:
+
+- Original component:  
+  [`react-timeline-range-slider`](https://github.com/lizashkod/react-timeline-range-slider)
+
+All core timeline/validation logic comes from that library; this project mainly adapts it to a Next.js + Tailwind setup and adds a small demo page.
+
+---
+
+## License
+
+This project follows the same spirit as the original `react-timeline-range-slider` and is intended for learning and example purposes.  
+Please refer to the original repository’s license if you reuse significant parts of the component logic. 
