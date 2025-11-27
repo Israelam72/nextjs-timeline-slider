@@ -74,7 +74,7 @@ export default App;
 
 ## Tech Stack
 
-- **Next.js 16 (App Router)**
+- **Next.js 16**
 - **React 19**
 - **TypeScript**
 - **Tailwind CSS v4**
@@ -90,7 +90,7 @@ This project is **heavily based on** the original work by **[lizashkod](https://
 - Original component:  
   [`react-timeline-range-slider`](https://github.com/lizashkod/react-timeline-range-slider)
 
-All core timeline/validation logic comes from that library; this project mainly adapts it to a Next.js + Tailwind setup and adds a small demo page.
+All core timeline/validation logic comes from that library; this project mainly adapts it to a Next.js + Tailwind setup.
 
 ---
 
